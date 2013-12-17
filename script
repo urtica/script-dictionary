@@ -1,0 +1,63 @@
+###http://borisnote.wordpress.com/2010/05/04/frequency_word-python/
+#-*- coding: utf-8 -*-
+#OS:ubuntu 13.10
+#language:python 2.7.5+
+#ide:IDLE
+
+import sys
+import os
+import re
+ 
+if len(sys.argv)==1:
+    print('"print: python <scriptname> <filename>"')
+    sys.exit(1)
+ 
+work_file = sys.argv[1]
+if os.path.isfile(work_file):
+    print('File: ' + work_file)
+# список всех слов(выражений) из файла, уд. условиям задания
+res=[]
+# читаем файл
+file = open(work_file,'r')
+# выбираем слова 
+try:
+  for strings in file:
+    list1=re.findall("[a-zA-Z-]+", strings)
+    #для выбранного слова
+    tmplst=[]
+    #проверка условия задания
+    for words in list1:
+	if re.match("^cup+|table+|teaspoo+|ounc+|pinch|nbsp|^[Oo][Rr]$|^with$|inch+|degree+|^can+|^for|taste|garnish|^to$|\w+[pdctnklmsh]ed$|^[Jj]ar$|^pound+|^box+|^packag+|^dash+|^gram+|\w+ly$|[A-Z]+|^and$|^to $|^cut$|\w+less$|^halve+|^recip+|^into$|^piece$|^pieces$|^at$|^no substitutes$|^no$|^optional$|^container$|^fl$|^oz$|^of$|^desire+|^half+|^as$|^a$|^the$|^newspaper+|paper+|^foil$",words):
+	  pass	
+	else:
+	  tmplst.append(words)
+	  
+    if len(tmplst)>0 and len(tmplst)<3:    
+      if len(tmplst)>=2 and tmplst[0]=='salt' and tmplst[1]=='pepper':
+	res.append('salt')
+	res.append('pepper')
+      else:
+	res.append(" ".join(tmplst))
+finally:
+    file.close()
+ 
+# создаем словарь. Ключ-слово(выражение), Значение-частота повторения
+Dict = {}
+for key in res:
+    if key in Dict:
+        value = Dict[key]
+        Dict[key]=value+1
+    else:
+        Dict[key]=1
+
+# создаем список ключей отсортированный по значению словаря 
+sorted_keys = sorted(Dict, key=lambda x: int(Dict[x]), reverse=True)
+file = open(work_file+'_dict.txt','w+')
+try:
+    for key in sorted_keys:
+        #s = str("{0}--{1}\n").format(key,Dict[key])
+        s = str("{0}\n").format(key)
+        file.write(s)
+    print('Result file: '+work_file+'_dict.txt')
+finally:
+    file.close()
