@@ -1,7 +1,7 @@
 ###http://borisnote.wordpress.com/2010/05/04/frequency_word-python/
 #-*- coding: utf-8 -*-
-#OS:ubuntu 13.10
-#language:python 2.7.5+
+
+#language ver:python 2.7.5+
 #ide:IDLE
 
 import sys
